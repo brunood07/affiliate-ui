@@ -1,7 +1,8 @@
 "use client";
 
+import { fetchAffiliates } from "@/actions/affiliates-actions";
 import AffiliatesList from "@/components/affiliates-list/AffiliatesList";
-import { fetchAffiliates } from "@/lib/fetch-affiliates";
+import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 
 export interface Affiliate {
@@ -26,20 +27,16 @@ export interface AffiliatesListResponse {
 
 export default function Affiliates() {
   const [affiliates, setAffiliates] = useState<AffiliatesListResponse>({} as AffiliatesListResponse);
+  const { data: session } = useSession();
   
   useEffect(() => {
-    fetchAffiliates("http://localhost:3333/affiliates/list").then(
-      async (response) => {
-        try {
-          if (response.status === 200) {
-            const jsonData = await response.json()
-            setAffiliates(jsonData)
-          }
-        } catch (err) {
-          console.log(err);
-        }
-      })
-    }, [])
+  (async () => {
+    const response = await fetchAffiliates();
+    if (response) {
+      setAffiliates(response);
+    }
+  })()
+  }, [session])
     
   return (
     <div className="flex flex-col w-[1080px] h-full my-2 m-auto">
