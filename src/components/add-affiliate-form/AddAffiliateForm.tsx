@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { addAffiliateFormSchema, addAffiliateFormType } from "./add-affiliate-form-schema"
-
+import { UserPlus } from 'lucide-react'
 import { Button } from "@/components/ui/button"
 import {
   Form,
@@ -15,10 +15,11 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { addAffiliate } from "@/actions/affiliates-actions"
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
+import { toast } from "@/hooks/use-toast"
 
 export default function AddAffiliateForm() {
-
- const form = useForm<addAffiliateFormType>({
+  const form = useForm<addAffiliateFormType>({
     resolver: zodResolver(addAffiliateFormSchema),
     defaultValues: {
       firstName: "",
@@ -32,79 +33,121 @@ export default function AddAffiliateForm() {
     try {
       const response = await addAffiliate(values);
       if (!response.error) {
+        toast({
+          title: "Afiliado adicionado",
+          description: "O afiliado foi adicionado com sucesso.",
+          duration: 3000,
+        })
         window.location.href = "/affiliates";
       }
     } catch (error) {
       if (error instanceof Error) {
         form.setError("email", { message: error.message });
         form.setError("phoneNumber", { message: error.message });
+        toast({
+          title: "Erro",
+          description: error.message,
+          variant: "destructive",
+        })
       } else {
-        form.setError("email", { message: "An unknown error occurred" });
+        form.setError("email", { message: "Ocorreu um erro desconhecido" });
+        toast({
+          title: "Erro",
+          description: "Ocorreu um erro desconhecido",
+          variant: "destructive",
+        })
       }
     }
   }
 
   return (
-    <Form {...form}>
-        <div className="flex items-center justify-center max-w-[400px] w-full mt-4 m-auto">
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Nome</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Nome do Afiliado" className="bg-white" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Sobrenome</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Sobrenome do Afiliado" className="bg-white" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>E-mail</FormLabel>
-                  <FormControl>
-                    <Input placeholder="E-mail do Afiliado" type="email" className="bg-white"{...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="phoneNumber"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Telefone</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Telefone do Afiliado" className="bg-white" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" className="w-[280px] m-auto" disabled={!form.formState.isValid || form.formState.isSubmitting}>Adicionar</Button>          </form>
-        </div>
-      </Form>
+    <div className="flex items-center justify-center p-4">
+      <Card className="w-full max-w-md">
+        <CardHeader>
+          <CardTitle className="text-2xl font-bold text-center">Adicionar Novo Afiliado</CardTitle>
+          <CardDescription className="text-center">Preencha os detalhes do novo afiliado abaixo.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nome</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Nome" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Sobrenome</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Sobrenome" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>E-mail</FormLabel>
+                    <FormControl>
+                      <Input placeholder="email@exemplo.com" type="email" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="phoneNumber"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Telefone</FormLabel>
+                    <FormControl>
+                      <Input placeholder="(00) 00000-0000" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button 
+                type="submit" 
+                className="w-full"
+                disabled={!form.formState.isValid || form.formState.isSubmitting}
+              >
+                {form.formState.isSubmitting ? (
+                  <span className="flex items-center justify-center">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Adicionando...
+                  </span>
+                ) : (
+                  <span className="flex items-center justify-center">
+                    <UserPlus className="mr-2 h-4 w-4" />
+                    Adicionar Afiliado
+                  </span>
+                )}
+              </Button>
+            </form>
+          </Form>
+        </CardContent>
+      </Card>
+    </div>
   )
 }
