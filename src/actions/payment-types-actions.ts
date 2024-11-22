@@ -1,16 +1,16 @@
 import { AddPaymentTypeFormType } from "@/components/add-payment-type-form/add-payment-type-form-schema"
+import { baseURL } from "@/constants/endpoints"
 import { getSession } from "next-auth/react"
 
 export const fetchPaymentTypes = async (page: number) => {
   try {
     const session = await getSession()
 
-    const response = await fetch(`http://localhost:3333/list/types?page=${page}&limit=10`, {
+    const response = await fetch(`${baseURL}/list/types?page=${page}&limit=10`, {
       headers: {
         'Authorization': `Bearer ${session?.accessToken}`
       }
     })
-    console.log("🚀 ~ fetchPaymentTypes ~ response:", response)
 
     if (!response.ok) {
       throw new Error('Failed to fetch affiliates')
@@ -25,7 +25,7 @@ export const fetchPaymentTypes = async (page: number) => {
 export const addPaymentType = async (data: AddPaymentTypeFormType) => {
   const session = await getSession()
 
-  const response = await fetch('http://localhost:3333/types', {
+  const response = await fetch(`${baseURL}/types`, {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${session?.accessToken}`,
