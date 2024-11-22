@@ -54,7 +54,7 @@ export default function PaymentTypesList({ list }: PaymentTypesListProps) {
           placeholder="Buscar tipos de pagamento..."
           value={searchTerm}
           onChange={handleSearch}
-          className="max-w-sm mr-4"
+          className="max-w-sm mr-4 bg-white"
         />
         <Button variant="outline" className="flex items-center">
           <Search className="h-4 w-4 mr-2" />

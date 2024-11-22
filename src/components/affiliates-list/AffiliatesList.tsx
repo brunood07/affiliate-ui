@@ -50,7 +50,7 @@ export default function AffiliatesList({ list }: AffiliatesListProps) {
           placeholder="Buscar afiliados..."
           value={searchTerm}
           onChange={handleSearch}
-          className="max-w-sm mr-4"
+          className="max-w-sm mr-4 bg-white"
         />
         <Button variant="outline" className="flex items-center">
           <Search className="h-4 w-4 mr-2" />
