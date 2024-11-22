@@ -6,15 +6,11 @@ import Pagination from "@/components/pagination/Pagination";
 import { useState, useEffect } from "react";
 
 export interface Affiliate {
-  _id: {
-    value: string;
-  };
-  props: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    phoneNumber: string;
-  }
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phoneNumber: string;
 }
 
 export interface AffiliatesListResponse {

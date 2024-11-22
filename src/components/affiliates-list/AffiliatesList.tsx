@@ -19,9 +19,9 @@ export default function AffiliatesList({ list }: AffiliatesListProps) {
     const term = event.target.value.toLowerCase();
     setSearchTerm(term);
     const filteredList = list.filter((affiliate: Affiliate) => 
-      `${affiliate.props.firstName} ${affiliate.props.lastName}`.toLowerCase().includes(term) ||
-      affiliate.props.email.toLowerCase().includes(term) ||
-      affiliate.props.phoneNumber.includes(term)
+      `${affiliate.firstName} ${affiliate.lastName}`.toLowerCase().includes(term) ||
+      affiliate.email.toLowerCase().includes(term) ||
+      affiliate.phoneNumber.includes(term)
     );
     setSearchList(filteredList);
   };
@@ -77,10 +77,10 @@ export default function AffiliatesList({ list }: AffiliatesListProps) {
                 </TableRow>
               ) : (
                 list.map((affiliate: Affiliate) => (
-                  <TableRow key={affiliate._id.value}>
-                    <TableCell className="font-medium">{affiliate.props.firstName} {affiliate.props.lastName}</TableCell>
-                    <TableCell>{affiliate.props.phoneNumber}</TableCell>
-                    <TableCell>{affiliate.props.email}</TableCell>
+                  <TableRow key={affiliate.id}>
+                    <TableCell className="font-medium">{affiliate.firstName} {affiliate.lastName}</TableCell>
+                    <TableCell>{affiliate.phoneNumber}</TableCell>
+                    <TableCell>{affiliate.email}</TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end space-x-2">
                         <Tooltip>
@@ -89,7 +89,7 @@ export default function AffiliatesList({ list }: AffiliatesListProps) {
                               variant="outline"
                               size="sm"
                               className="text-blue-600 border-blue-600 hover:bg-blue-50 focus:ring-blue-500"
-                              onClick={() => handleOpenPayments(affiliate._id.value)}
+                              onClick={() => handleOpenPayments(affiliate.id)}
                             >
                               <CreditCard className="h-4 w-4 mr-2" />
                               Pagamentos
@@ -106,7 +106,7 @@ export default function AffiliatesList({ list }: AffiliatesListProps) {
                               variant="outline"
                               size="sm"
                               className="text-green-600 border-green-600 hover:bg-green-50 focus:ring-green-500"
-                              onClick={() => handleUpdateAffiliate(affiliate._id.value)}
+                              onClick={() => handleUpdateAffiliate(affiliate.id)}
                             >
                               <Edit className="h-4 w-4 mr-2" />
                               Editar
@@ -123,7 +123,7 @@ export default function AffiliatesList({ list }: AffiliatesListProps) {
                               variant="outline"
                               size="sm"
                               className="text-red-600 border-red-600 hover:bg-red-50 focus:ring-red-500"
-                              onClick={() => handleDeleteAffiliate(affiliate._id.value)}
+                              onClick={() => handleDeleteAffiliate(affiliate.id)}
                             >
                               <Trash2 className="h-4 w-4 mr-2" />
                               Deletar

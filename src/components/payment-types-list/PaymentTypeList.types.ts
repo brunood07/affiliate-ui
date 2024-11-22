@@ -8,14 +8,10 @@ interface PaymentTypeListData {
 }
 
 interface PaymentTypeList {
-  _id: {
-    value: string;
-  };
-  props: {
-    active: boolean;
-    name: string;
-    quantity: string;
-  }
+  id: string;
+  active: boolean;
+  name: string;
+  quantity: string;
 }
 
 export type { PaymentTypeListData, PaymentTypeList }

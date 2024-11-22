@@ -23,8 +23,8 @@ export default function PaymentTypesList({ list }: PaymentTypesListProps) {
     setSearchTerm(term);
     if (!list) return;
     const filteredList = list.filter(paymentType => 
-      paymentType.props.name.toLowerCase().includes(term) ||
-      paymentType.props.quantity.toString().includes(term)
+      paymentType.name.toLowerCase().includes(term) ||
+      paymentType.quantity.toString().includes(term)
     );
     setSearchList(filteredList);
   };
@@ -81,13 +81,13 @@ export default function PaymentTypesList({ list }: PaymentTypesListProps) {
                 </TableRow>
               ) : (
                 list?.map((paymentType: PaymentTypeList) => (
-                  <TableRow key={paymentType._id.value}>
-                    <TableCell className="font-medium">{paymentType.props.name}</TableCell>
-                    <TableCell>{paymentType.props.quantity}</TableCell>
+                  <TableRow key={paymentType.id}>
+                    <TableCell className="font-medium">{paymentType.name}</TableCell>
+                    <TableCell>{paymentType.quantity}</TableCell>
                     <TableCell>
                       <Checkbox 
-                        checked={paymentType.props.active} 
-                        onCheckedChange={() => handleToggleActive(paymentType._id.value, paymentType.props.active)}
+                        checked={paymentType.active} 
+                        onCheckedChange={() => handleToggleActive(paymentType.id, paymentType.active)}
                         className="w-5 h-5"
                       />
                     </TableCell>
@@ -99,7 +99,7 @@ export default function PaymentTypesList({ list }: PaymentTypesListProps) {
                               variant="outline"
                               size="sm"
                               className="text-blue-600 border-blue-600 hover:bg-blue-50 focus:ring-blue-500"
-                              onClick={() => handleUpdatePaymentType(paymentType._id.value)}
+                              onClick={() => handleUpdatePaymentType(paymentType.id)}
                             >
                               <Edit className="h-4 w-4 mr-2" />
                               Editar
@@ -116,7 +116,7 @@ export default function PaymentTypesList({ list }: PaymentTypesListProps) {
                               variant="outline"
                               size="sm"
                               className="text-red-600 border-red-600 hover:bg-red-50 focus:ring-red-500"
-                              onClick={() => handleDeletePaymentType(paymentType._id.value)}
+                              onClick={() => handleDeletePaymentType(paymentType.id)}
                             >
                               <Trash2 className="h-4 w-4 mr-2" />
                               Deletar
