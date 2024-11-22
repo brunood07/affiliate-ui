@@ -34,12 +34,16 @@ export default function LoginForm() {
   } = form;
 
   const onSubmit = async (formData: LoginFormType) => {
-    await signIn('credentials', {
-      email: formData.email,
-      password: formData.password,
-      redirect: true,
-      callbackUrl: '/affiliates'
-    })
+    try {
+      await signIn('credentials', {
+        email: formData.email,
+        password: formData.password,
+        redirect: true,
+        callbackUrl: '/affiliates'
+      })
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (

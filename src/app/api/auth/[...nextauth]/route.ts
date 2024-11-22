@@ -47,6 +47,13 @@ const authOptions = {
     })
   ],
   callbacks: {
+    async jwt({ token, user }) {
+      if (user) {
+        token.accessToken = user.accessToken
+        token.refreshToken = user.refreshToken
+      }
+      return token
+    },
     async session({ session, token }: { session: Session, token: JWT }) {
       session.accessToken = token.accessToken as string ?? ""
       session.refreshToken = token.refreshToken as string ?? ""

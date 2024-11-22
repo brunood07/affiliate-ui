@@ -55,8 +55,8 @@ export default function Affiliates() {
       </div>
       <div className="flex flex-col w-full h-full items-center justify-center m-auto">
         <AffiliatesList list={affiliates?.list ?? []} />
+        <Pagination returnPage={returnPage} currentPage={currentPage} nextPage={nextPage} totalOfPages={affiliates.totalOfPages} />
       </div>
-      <Pagination returnPage={returnPage} currentPage={currentPage} nextPage={nextPage} totalOfPages={affiliates.totalOfPages} />
     </div>
   );
 }
