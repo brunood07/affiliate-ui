@@ -31,7 +31,7 @@ export const addAffiliate = async (data: addAffiliateFormType) => {
 
   if (!response.ok) {
     const errorData = await response.json()
-    throw new Error(errorData.message || 'Failed to fetch affiliates')
+    throw new Error(errorData.message || 'Failed to create Affiliate')
   }
 
   return response.json()
