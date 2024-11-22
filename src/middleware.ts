@@ -9,6 +9,8 @@ export default withAuth({
 export const config = {
   matcher: [
     '/affiliates',
-    // Add other private routes here
+    '/payment-types',
+    '/dashboard',
+    '/info'
   ]
 }

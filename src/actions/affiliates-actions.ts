@@ -1,9 +1,9 @@
 import { getSession } from 'next-auth/react'
 
-export const fetchAffiliates = async () => {
+export const fetchAffiliates = async (page: number) => {
   const session = await getSession()
 
-  const response = await fetch('http://localhost:3333/affiliates/list', {
+  const response = await fetch('http://localhost:3333/affiliates/list?page=' + page, {
     headers: {
       'Authorization': `Bearer ${session?.accessToken}`
     }
