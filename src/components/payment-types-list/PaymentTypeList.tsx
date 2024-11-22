@@ -16,6 +16,7 @@ interface PaymentTypesListProps {
 
 export default function PaymentTypesList({ list }: PaymentTypesListProps) {
   const [searchTerm, setSearchTerm] = useState("");
+   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [searchList, setSearchList] = useState(list);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {

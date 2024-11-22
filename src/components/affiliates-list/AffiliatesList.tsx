@@ -13,6 +13,7 @@ interface AffiliatesListProps {
 
 export default function AffiliatesList({ list }: AffiliatesListProps) {
   const [searchTerm, setSearchTerm] = useState("");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [searchList, setSearchList] = useState(list);
 
   const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
