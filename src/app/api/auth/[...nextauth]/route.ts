@@ -1,3 +1,4 @@
+import { baseURL } from '@/constants/endpoints'
 import NextAuth, { Session } from 'next-auth'
 import { JWT } from 'next-auth/jwt'
 import CredentialsProvider from 'next-auth/providers/credentials'
@@ -16,7 +17,7 @@ const authOptions = {
         }
 
         try {
-          const res = await fetch('http://localhost:3333/sessions', {
+          const res = await fetch(`${baseURL}/sessions`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
