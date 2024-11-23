@@ -9,6 +9,7 @@ export default withAuth({
 export const config = {
   matcher: [
     '/affiliates',
+    '/affiliates/:path*',
     '/payment-types',
     '/dashboard',
     '/info'

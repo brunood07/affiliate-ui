@@ -8,7 +8,7 @@ import { Input } from "../ui/input";
 import Link from "next/link";
 
 interface AffiliatesListProps {
-  list: Affiliate[]
+  list: Affiliate[];
 }
 
 export default function AffiliatesList({ list }: AffiliatesListProps) {
@@ -28,7 +28,7 @@ export default function AffiliatesList({ list }: AffiliatesListProps) {
   };
 
   const handleOpenPayments = (id: string) => {
-    console.log(`Abrir pagamentos para o afiliado ${id}`);
+    window.location.href = "/affiliates/" + id;
   };
 
   const handleUpdateAffiliate = (id: string) => {

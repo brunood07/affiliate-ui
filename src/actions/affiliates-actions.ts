@@ -36,3 +36,22 @@ export const addAffiliate = async (data: addAffiliateFormType) => {
 
   return response.json()
 }
+
+export const fetchAffiliatePayment = async (id: string, page: number) => {
+  const session = await getSession()
+
+  const response = await fetch(`${baseURL}/affiliate/payments/${id}?page=` + page, {
+    headers: {
+      'Authorization': `Bearer ${session?.accessToken}`,
+      'Content-Type': 'application/json'
+    },
+  })
+  console.log("🚀 ~ fetchAffiliatePayment ~ response:", response)
+
+  if (!response.ok) {
+    const errorData = await response.json()
+    throw new Error(errorData.message || 'Failed to fetch affiliate payments')
+  }
+
+  return response.json()
+}

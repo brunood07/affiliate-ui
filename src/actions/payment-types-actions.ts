@@ -41,3 +41,30 @@ export const addPaymentType = async (data: AddPaymentTypeFormType) => {
 
   return response.json()
 }
+
+export const createAffiliatePayment = async (affiliateId: string, paymentTypeId: string) => {
+  if (!affiliateId || !paymentTypeId) {
+    throw new Error("Both affiliateId and paymentTypeId are required.");
+  }
+
+  const session = await getSession()
+
+  const response = await fetch(`${baseURL}/payments`, {
+    method: 'POST',
+    headers: {
+      'Authorization': `Bearer ${session?.accessToken}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      affiliateId,
+      paymentTypeId
+    })
+  })
+
+  if (!response.ok) {
+    const errorData = await response.json()
+    throw new Error(errorData.message || 'Failed to create Payment Type')
+  }
+
+  return response.json()
+}
