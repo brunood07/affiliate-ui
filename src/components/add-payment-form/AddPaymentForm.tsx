@@ -140,7 +140,7 @@ export default function AddPaymentForm(props: AddPaymentFormProps) {
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a payment type" />
+                          <SelectValue placeholder="Selecione o tipo de pagamento" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
