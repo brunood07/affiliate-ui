@@ -1,4 +1,5 @@
 import { AddPaymentTypeFormType } from "@/components/add-payment-type-form/add-payment-type-form-schema"
+import { UpdatePaymentTypeFormType } from "@/components/update-payment-type-form/update-payment-type-form-schema"
 import { baseURL } from "@/constants/endpoints"
 import { getSession } from "next-auth/react"
 
@@ -64,6 +65,65 @@ export const createAffiliatePayment = async (affiliateId: string, paymentTypeId:
   if (!response.ok) {
     const errorData = await response.json()
     throw new Error(errorData.message || 'Failed to create Payment Type')
+  }
+
+  return response.json()
+}
+
+export const getPaymentTypeInfo = async (paymentTypeId: string) => {
+  const session = await getSession()
+
+  const response = await fetch(`${baseURL}/types/${paymentTypeId}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${session?.accessToken}`,
+      'Content-Type': 'application/json'
+    },
+  })
+
+  if (!response.ok) {
+    const errorData = await response.json()
+    throw new Error(errorData.message || 'Failed to get Payment Type information')
+  }
+
+  return response.json()
+}
+
+export const updatePaymentTypeInfo = async (paymentTypeId: string, data: UpdatePaymentTypeFormType) => {
+  console.log("🚀 ~ updatePaymentTypeInfo ~ data:", data)
+  const session = await getSession()
+
+  const response = await fetch(`${baseURL}/types/${paymentTypeId}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${session?.accessToken}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+
+  if (!response.ok) {
+    const errorData = await response.json()
+    throw new Error(errorData.message || 'Failed to update Payment Type')
+  }
+
+  return response.json()
+}
+
+export const deletePaymentType = async (paymentTypeId: string) => {
+  const session = await getSession()
+
+  const response = await fetch(`${baseURL}/types/${paymentTypeId}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${session?.accessToken}`,
+      'Content-Type': 'application/json'
+    },
+  })
+
+  if (!response.ok) {
+    const errorData = await response.json()
+    throw new Error(errorData.message || 'Failed to delete PaymentType')
   }
 
   return response.json()

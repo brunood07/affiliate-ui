@@ -1,4 +1,5 @@
 import { addAffiliateFormType } from '@/components/add-affiliate-form/add-affiliate-form-schema'
+import { UpdateAffiliateFormType } from '@/components/update-affiliate-form/update-affiliate-form-schema'
 import { baseURL } from '@/constants/endpoints'
 import { getSession } from 'next-auth/react'
 
@@ -37,6 +38,64 @@ export const addAffiliate = async (data: addAffiliateFormType) => {
   return response.json()
 }
 
+export const getAffiliateInfo = async (affiliateId: string) => {
+  const session = await getSession()
+
+  const response = await fetch(`${baseURL}/affiliates/${affiliateId}`, {
+    method: 'GET',
+    headers: {
+      'Authorization': `Bearer ${session?.accessToken}`,
+      'Content-Type': 'application/json'
+    },
+  })
+
+  if (!response.ok) {
+    const errorData = await response.json()
+    throw new Error(errorData.message || 'Failed to update Affiliate')
+  }
+
+  return response.json()
+}
+
+export const updateAffiliateInfo = async (affiliateId: string, data: UpdateAffiliateFormType) => {
+  const session = await getSession()
+
+  const response = await fetch(`${baseURL}/affiliates/${affiliateId}`, {
+    method: 'PUT',
+    headers: {
+      'Authorization': `Bearer ${session?.accessToken}`,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data)
+  })
+
+  if (!response.ok) {
+    const errorData = await response.json()
+    throw new Error(errorData.message || 'Failed to update Affiliate')
+  }
+
+  return response.json()
+}
+
+export const deleteAffiliate = async (affiliateId: string) => {
+  const session = await getSession()
+
+  const response = await fetch(`${baseURL}/affiliates/${affiliateId}`, {
+    method: 'DELETE',
+    headers: {
+      'Authorization': `Bearer ${session?.accessToken}`,
+      'Content-Type': 'application/json'
+    },
+  })
+
+  if (!response.ok) {
+    const errorData = await response.json()
+    throw new Error(errorData.message || 'Failed to update Affiliate')
+  }
+
+  return response.json()
+}
+
 export const fetchAffiliatePayment = async (id: string, page: number) => {
   const session = await getSession()
 
@@ -46,7 +105,6 @@ export const fetchAffiliatePayment = async (id: string, page: number) => {
       'Content-Type': 'application/json'
     },
   })
-  console.log("🚀 ~ fetchAffiliatePayment ~ response:", response)
 
   if (!response.ok) {
     const errorData = await response.json()

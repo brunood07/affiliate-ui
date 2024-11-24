@@ -6,12 +6,17 @@ import { Button } from "../ui/button";
 import { useState } from "react";
 import { Input } from "../ui/input";
 import Link from "next/link";
+import { GenericConfirmationModal } from "../generic-confirmation-modal/GenericConfirmationModal";
 
 interface AffiliatesListProps {
   list: Affiliate[];
+  isModalOpen: boolean;
+  handleCloseModal: () => void;
+  handleDeleteAffiliate: () => void;
+  handleOpenDeleteAffiliateModal: (id: string) => void;
 }
-
-export default function AffiliatesList({ list }: AffiliatesListProps) {
+ 
+export default function AffiliatesList({ list, handleCloseModal, handleDeleteAffiliate, handleOpenDeleteAffiliateModal, isModalOpen }: AffiliatesListProps) {
   const [searchTerm, setSearchTerm] = useState("");
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [searchList, setSearchList] = useState(list);
@@ -32,15 +37,20 @@ export default function AffiliatesList({ list }: AffiliatesListProps) {
   };
 
   const handleUpdateAffiliate = (id: string) => {
-    console.log(`Atualizar afiliado ${id}`);
-  };
-
-  const handleDeleteAffiliate = (id: string) => {
-    console.log(`Deletar afiliado ${id}`);
+    window.location.href = "/affiliates/update/" + id;
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <GenericConfirmationModal 
+        cancelText="Cancelar" 
+        confirmText="Deletar" 
+        title="Deletar Afiliado" 
+        description="Deseja deletar o afiliado?" 
+        isOpen={isModalOpen}
+        onClose={() => handleCloseModal()}
+        onConfirm={() => handleDeleteAffiliate()}
+      />
       <div className="flex flex-row justify-between items-center">
         <h1 className="text-3xl font-bold mb-6 text-gray-800">Lista de Afiliados</h1>
         <Link className="rounded-lg bg-black text-white p-2" href="/affiliates/create">Adicionar Novo</Link>
@@ -124,7 +134,7 @@ export default function AffiliatesList({ list }: AffiliatesListProps) {
                               variant="outline"
                               size="sm"
                               className="text-red-600 border-red-600 hover:bg-red-50 focus:ring-red-500"
-                              onClick={() => handleDeleteAffiliate(affiliate.id)}
+                              onClick={() => handleOpenDeleteAffiliateModal(affiliate.id)}
                             >
                               <Trash2 className="h-4 w-4 mr-2" />
                               Deletar

@@ -9,12 +9,17 @@ import { TooltipProvider, Tooltip, TooltipTrigger, TooltipContent } from "@/comp
 import { Edit, Trash2, Search } from 'lucide-react'
 import { PaymentTypeList } from "./PaymentTypeList.types"
 import Link from "next/link";
+import { GenericConfirmationModal } from "../generic-confirmation-modal/GenericConfirmationModal";
 
 interface PaymentTypesListProps {
   list?: PaymentTypeList[]
+  isModalOpen: boolean;
+  handleCloseModal: () => void;
+  handleDeletePaymentType: () => void;
+  handleOpenDeletePaymentTypeModal: (id: string) => void;
 }
 
-export default function PaymentTypesList({ list }: PaymentTypesListProps) {
+export default function PaymentTypesList({ list, handleCloseModal, handleDeletePaymentType, handleOpenDeletePaymentTypeModal, isModalOpen }: PaymentTypesListProps) {
   const [searchTerm, setSearchTerm] = useState("");
    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [searchList, setSearchList] = useState(list);
@@ -31,19 +36,21 @@ export default function PaymentTypesList({ list }: PaymentTypesListProps) {
   };
 
   const handleUpdatePaymentType = (id: string) => {
-    console.log(`Atualizar tipo de pagamento ${id}`);
-  };
-
-  const handleDeletePaymentType = (id: string) => {
-    console.log(`Deletar tipo de pagamento ${id}`);
-  };
-
-  const handleToggleActive = (id: string, currentState: boolean) => {
-    console.log(`Alternar ativo para ${id}, estado atual: ${currentState}`);
+    window.location.href = "/payment-types/update/" + id;
   };
 
   return (
     <div className="container mx-auto px-4 py-8">
+       <GenericConfirmationModal 
+        cancelText="Cancelar" 
+        confirmText="Deletar" 
+        title="Deletar Tipo de Pagamento" 
+        description="Deseja deletar o Tipo de Pagamento?" 
+        isOpen={isModalOpen}
+        onClose={() => handleCloseModal()}
+        onConfirm={() => handleDeletePaymentType()}
+      />
+
       <div className="flex flex-row justify-between items-center">
         <h1 className="text-3xl font-bold mb-6 text-gray-800">Tipos de Pagamento</h1>
         <Link className="rounded-lg bg-black text-white p-2" href="/payment-types/create">Adicionar Novo</Link>
@@ -88,7 +95,7 @@ export default function PaymentTypesList({ list }: PaymentTypesListProps) {
                     <TableCell>
                       <Checkbox 
                         checked={paymentType.active} 
-                        onCheckedChange={() => handleToggleActive(paymentType.id, paymentType.active)}
+                        onCheckedChange={() => null}
                         className="w-5 h-5"
                       />
                     </TableCell>
@@ -117,7 +124,7 @@ export default function PaymentTypesList({ list }: PaymentTypesListProps) {
                               variant="outline"
                               size="sm"
                               className="text-red-600 border-red-600 hover:bg-red-50 focus:ring-red-500"
-                              onClick={() => handleDeletePaymentType(paymentType.id)}
+                              onClick={() => handleOpenDeletePaymentTypeModal(paymentType.id)}
                             >
                               <Trash2 className="h-4 w-4 mr-2" />
                               Deletar
