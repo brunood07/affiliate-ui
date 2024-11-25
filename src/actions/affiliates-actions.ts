@@ -41,7 +41,7 @@ export const addAffiliate = async (data: addAffiliateFormType) => {
 export const getAffiliateInfo = async (affiliateId: string) => {
   const session = await getSession()
 
-  const response = await fetch(`${baseURL}/affiliates/${affiliateId}`, {
+  const response = await fetch(`${baseURL}/affiliates/info/${affiliateId}`, {
     method: 'GET',
     headers: {
       'Authorization': `Bearer ${session?.accessToken}`,

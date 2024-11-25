@@ -4,16 +4,18 @@ import { Bar, BarChart, XAxis, YAxis, Legend, ResponsiveContainer } from "rechar
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 
-const data = [
-  { month: "Janeiro", numberOfAffiliates: 120, completedPayments: 120 },
-  { month: "Fevereiro", numberOfAffiliates: 130, completedPayments: 50 },
-  { month: "Março", numberOfAffiliates: 140, completedPayments: 70 },
-  { month: "Abril", numberOfAffiliates: 150, completedPayments: 80 },
-  { month: "Maio", numberOfAffiliates: 160, completedPayments: 100 },
-  { month: "Junho", numberOfAffiliates: 170, completedPayments: 400 },
-]
+interface PaymentChartProps {
+  stats: MonthlyStats[];
+}
 
-export default function PaymentComparisonChart() {
+interface MonthlyStats {
+  month: string
+  totalAffiliates: number
+  affiliatesWithCompletePayments: number
+}
+
+export default function PaymentComparisonChart(props: PaymentChartProps) {
+  const { stats } = props;
   return (
     <div>
       <div className="flex flex-row justify-between items-center">
@@ -27,11 +29,11 @@ export default function PaymentComparisonChart() {
         <CardContent>
           <ChartContainer
             config={{
-              numberOfAffiliates: {
+              totalAffiliates: {
                 label: "Afiliados",
                 color: "hsl(var(--chart-1))",
               },
-              completedPayments: {
+              affiliatesWithCompletePayments: {
                 label: "Pagamentos Concluídos",
                 color: "hsl(var(--chart-2))",
               },
@@ -39,13 +41,13 @@ export default function PaymentComparisonChart() {
             className="h-[400px]"
           >
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+              <BarChart data={stats} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                 <XAxis dataKey="month" />
                 <YAxis />
                 <ChartTooltip content={<ChartTooltipContent />} />
                 <Legend />
-                <Bar dataKey="numberOfAffiliates" fill="var(--color-numberOfAffiliates)" name="Afiliados" />
-                <Bar dataKey="completedPayments" fill="var(--color-completedPayments)" name="Pagamentos Concluídos" />
+                <Bar dataKey="totalAffiliates" fill="var(--color-totalAffiliates)" name="Afiliados" />
+                <Bar dataKey="affiliatesWithCompletePayments" fill="var(--color-affiliatesWithCompletePayments)" name="Pagamentos Concluídos" />
               </BarChart>
             </ResponsiveContainer>
           </ChartContainer>

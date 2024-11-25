@@ -19,22 +19,20 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { toast } from "@/hooks/use-toast"
 import { UpdatePaymentTypeFormType, updatePaymentTypeFormSchema } from "./update-payment-type-form-schema"
-import { useState, useEffect } from "react"
-import { PaymentTypeList } from "../payment-types-list/PaymentTypeList.types"
 import { getPaymentTypeInfo, updatePaymentTypeInfo } from "@/actions/payment-types-actions"
+import { useEffect } from "react"
 
 interface UpdatePaymentTypeFormProps {
   paymentTypeId: string;
 }
 
 export default function UpdatePaymentTypeForm(props: UpdatePaymentTypeFormProps) {
-  const [currentPaymentTypeInfo, setCurrentPaymentTypeInfo] = useState<PaymentTypeList>({} as PaymentTypeList);
   const form = useForm<UpdatePaymentTypeFormType>({
     resolver: zodResolver(updatePaymentTypeFormSchema),
     defaultValues: {
-      name: currentPaymentTypeInfo.name,
-      quantity: currentPaymentTypeInfo.quantity,
-      active: currentPaymentTypeInfo.active
+      name: '',
+      quantity: '',
+      active: false
     },
   })
 
@@ -73,11 +71,10 @@ export default function UpdatePaymentTypeForm(props: UpdatePaymentTypeFormProps)
     (async () => {
       const response = await getPaymentTypeInfo(props.paymentTypeId);
       if (response) {
-        setCurrentPaymentTypeInfo(response);
         form.reset({
-          name: response.name,
-          quantity: response.quantity,
-          active: response.active
+          name: response.name ?? '',
+          quantity: response.quantity ?? 0,
+          active: response.active ?? false
         });
       }
     })()

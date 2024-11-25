@@ -12,7 +12,6 @@ export const loginFormSchema = z.object({
   password: z.string(),
 })
 
-
 export const loginResponseSchema = z.object({
   access_token: z.string(),
   refresh_token: z.string()
@@ -39,7 +38,7 @@ export default function LoginForm() {
         email: formData.email,
         password: formData.password,
         redirect: true,
-        callbackUrl: '/affiliates'
+        callbackUrl: '/dashboard'
       })
     } catch (err) {
       console.log(err);

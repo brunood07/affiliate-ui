@@ -46,7 +46,7 @@ export default function AddPaymentForm(props: AddPaymentFormProps) {
   useEffect(() => {
     (async () => {
       try {
-        const types = await fetchPaymentTypes(1)
+        const types = await fetchPaymentTypes(1, true)
         setPaymentTypes(types)
       } catch (error) {
 
@@ -81,7 +81,7 @@ export default function AddPaymentForm(props: AddPaymentFormProps) {
     try {
       const response = await createAffiliatePayment(
         props.affiliateId,
-        values.paymentTypeId 
+        values.paymentTypeId
       )
   
       if (response.id) {

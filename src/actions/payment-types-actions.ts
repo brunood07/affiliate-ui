@@ -3,11 +3,11 @@ import { UpdatePaymentTypeFormType } from "@/components/update-payment-type-form
 import { baseURL } from "@/constants/endpoints"
 import { getSession } from "next-auth/react"
 
-export const fetchPaymentTypes = async (page: number) => {
+export const fetchPaymentTypes = async (page: number, active?: boolean) => {
   try {
     const session = await getSession()
 
-    const response = await fetch(`${baseURL}/list/types?page=${page}&limit=10`, {
+    const response = await fetch(`${baseURL}/list/types?page=${page}&limit=10&active=${active}`, {
       headers: {
         'Authorization': `Bearer ${session?.accessToken}`
       }

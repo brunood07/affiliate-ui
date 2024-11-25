@@ -17,21 +17,19 @@ import { getAffiliateInfo, updateAffiliateInfo } from "@/actions/affiliates-acti
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { toast } from "@/hooks/use-toast"
 import { UpdateAffiliateFormType, updateAffiliateFormSchema } from "./update-affiliate-form-schema"
-import { useEffect, useState } from "react"
-import { Affiliate } from "@/app/affiliates/page"
+import { useEffect } from "react"
 
 interface UpdateAffiliateFormProps {
   affiliateId: string;
 }
 export default function UpdateAffiliateForm(props: UpdateAffiliateFormProps) {
-  const [currentAffiliateInfo, setCurrentAffiliateInfo] = useState<Affiliate>({} as Affiliate);
   const form = useForm<UpdateAffiliateFormType>({
     resolver: zodResolver(updateAffiliateFormSchema),
     defaultValues: {
-      firstName: currentAffiliateInfo.firstName,
-      lastName: currentAffiliateInfo.lastName,
-      email: currentAffiliateInfo.email,
-      phoneNumber: currentAffiliateInfo.phoneNumber,
+      firstName: '',
+      lastName: '',
+      email: '',
+      phoneNumber: '',
     },
   })
 
@@ -70,10 +68,15 @@ export default function UpdateAffiliateForm(props: UpdateAffiliateFormProps) {
     (async () => {
       const response = await getAffiliateInfo(props.affiliateId);
       if (response) {
-        setCurrentAffiliateInfo(response);
+        form.reset({
+          firstName: response.firstName,
+          lastName: response.lastName,
+          email: response.email,
+          phoneNumber: response.phoneNumber,
+        })
       }
     })()
-    }, [props.affiliateId])
+    }, [props.affiliateId, form])
 
   return (
     <div className="flex items-center justify-center p-4">
