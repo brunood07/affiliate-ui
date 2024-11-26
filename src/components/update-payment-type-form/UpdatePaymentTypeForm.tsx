@@ -20,13 +20,16 @@ import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/com
 import { toast } from "@/hooks/use-toast"
 import { UpdatePaymentTypeFormType, updatePaymentTypeFormSchema } from "./update-payment-type-form-schema"
 import { getPaymentTypeInfo, updatePaymentTypeInfo } from "@/actions/payment-types-actions"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import Spinner from "../ui/spinner"
 
 interface UpdatePaymentTypeFormProps {
   paymentTypeId: string;
 }
 
 export default function UpdatePaymentTypeForm(props: UpdatePaymentTypeFormProps) {
+  const [isLoading, setIsLoading] = useState(true)
+  
   const form = useForm<UpdatePaymentTypeFormType>({
     resolver: zodResolver(updatePaymentTypeFormSchema),
     defaultValues: {
@@ -76,13 +79,16 @@ export default function UpdatePaymentTypeForm(props: UpdatePaymentTypeFormProps)
           quantity: response.quantity ?? 0,
           active: response.active ?? false
         });
+
+        setIsLoading(false)
       }
     })()
     }, [props.paymentTypeId, form])
 
   return (
     <div className="flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+      {isLoading ? <Spinner /> : 
+        <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">Adicionar Novo Tipo de Pagamento</CardTitle>
           <CardDescription className="text-center">Preencha os detalhes do novo tipo de pagamento abaixo.</CardDescription>
@@ -161,7 +167,7 @@ export default function UpdatePaymentTypeForm(props: UpdatePaymentTypeFormProps)
             </form>
           </Form>
         </CardContent>
-      </Card>
+      </Card>}
     </div>
   )
 }

@@ -3,6 +3,7 @@
 import { fetchAffiliatePayment } from "@/actions/affiliates-actions";
 import Pagination from "@/components/pagination/Pagination";
 import PaymentsList, { Payment } from "@/components/payments-list/PaymentsList";
+import Spinner from "@/components/ui/spinner";
 import { useState, useEffect, use } from "react";
 
 interface ListPaymentsRes {
@@ -23,6 +24,7 @@ export default function Page({
   const { id } = use(params); 
   const [payments, setPayments] = useState<ListPaymentsRes>({} as ListPaymentsRes);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState(true)
   
   useEffect(() => {
     (async () => {
@@ -34,6 +36,8 @@ export default function Page({
         }
       } catch (error) {
         console.error("Failed to fetch payments:", error);
+      } finally {
+        setIsLoading(false)
       }
     })();
   }, [id, currentPage]);
@@ -49,8 +53,12 @@ export default function Page({
   return (
   <div className="flex flex-col w-[1080px] h-full my-2 m-auto">
     <div className="flex flex-col w-full h-full items-center justify-center m-auto">
-      <PaymentsList list={payments?.list} affiliateName={payments?.affiliateName} affiliateId={id} />
-      <Pagination returnPage={returnPage} currentPage={currentPage} nextPage={nextPage} totalOfPages={payments.totalOfPages} />
+      {isLoading ? <Spinner /> :
+        <>
+          <PaymentsList list={payments?.list} affiliateName={payments?.affiliateName} affiliateId={id} />
+          <Pagination returnPage={returnPage} currentPage={currentPage} nextPage={nextPage} totalOfPages={payments.totalOfPages} />
+        </>
+      }
     </div>
   </div>)
 }

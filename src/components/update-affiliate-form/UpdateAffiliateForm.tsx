@@ -17,12 +17,14 @@ import { getAffiliateInfo, updateAffiliateInfo } from "@/actions/affiliates-acti
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { toast } from "@/hooks/use-toast"
 import { UpdateAffiliateFormType, updateAffiliateFormSchema } from "./update-affiliate-form-schema"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
+import Spinner from "../ui/spinner"
 
 interface UpdateAffiliateFormProps {
   affiliateId: string;
 }
 export default function UpdateAffiliateForm(props: UpdateAffiliateFormProps) {
+  const [isLoading, setIsLoading] = useState(true)
   const form = useForm<UpdateAffiliateFormType>({
     resolver: zodResolver(updateAffiliateFormSchema),
     defaultValues: {
@@ -60,7 +62,7 @@ export default function UpdateAffiliateForm(props: UpdateAffiliateFormProps) {
           description: "Ocorreu um erro desconhecido",
           variant: "destructive",
         })
-      }
+      } 
     }
   }
 
@@ -74,13 +76,16 @@ export default function UpdateAffiliateForm(props: UpdateAffiliateFormProps) {
           email: response.email,
           phoneNumber: response.phoneNumber,
         })
+
+        setIsLoading(false)
       }
     })()
     }, [props.affiliateId, form])
 
   return (
     <div className="flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+      {isLoading ? <Spinner /> : 
+        <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center">Atualizar Afiliado</CardTitle>
           <CardDescription className="text-center">Preencha os detalhes a serem atualizados abaixo.</CardDescription>
@@ -165,7 +170,7 @@ export default function UpdateAffiliateForm(props: UpdateAffiliateFormProps) {
             </form>
           </Form>
         </CardContent>
-      </Card>
+      </Card>}
     </div>
   )
 }
