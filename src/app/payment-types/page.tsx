@@ -4,6 +4,7 @@ import { deletePaymentType, fetchPaymentTypes } from "@/actions/payment-types-ac
 import Pagination from "@/components/pagination/Pagination";
 import PaymentTypesList from "@/components/payment-types-list/PaymentTypeList";
 import { PaymentTypeListData } from "@/components/payment-types-list/PaymentTypeList.types";
+import Spinner from "@/components/ui/spinner";
 import { toast } from "@/hooks/use-toast";
 import { useState, useEffect, useCallback } from "react";
 
@@ -82,7 +83,7 @@ export default function PaymentTypes() {
   return (
     <div className="flex flex-col w-[1080px] h-full my-2 m-auto">
       <div className="flex flex-col w-full h-full items-center justify-center m-auto">
-        { isLoading ? <p>Carregando...</p> :
+        { isLoading ? <Spinner /> :
           <>
             <PaymentTypesList 
               list={paymentTypes.list ?? []} 

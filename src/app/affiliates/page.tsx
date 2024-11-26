@@ -3,6 +3,7 @@
 import { deleteAffiliate, fetchAffiliates } from "@/actions/affiliates-actions";
 import AffiliatesList from "@/components/affiliates-list/AffiliatesList";
 import Pagination from "@/components/pagination/Pagination";
+import Spinner from "@/components/ui/spinner";
 import { toast } from "@/hooks/use-toast";
 import { useState, useEffect, useCallback } from "react";
 
@@ -97,7 +98,7 @@ export default function Affiliates() {
   return (
     <div className="flex flex-col w-[1080px] h-full my-2 m-auto">
       <div className="flex flex-col w-full h-full items-center justify-center m-auto">
-      {isLoading ? <p>Carregando...</p> :
+      {isLoading ? <Spinner /> :
         <> 
           <AffiliatesList list={affiliates.list ?? []} isModalOpen={isModalOpen} handleCloseModal={handleCloseModal} handleDeleteAffiliate={handleDeleteAffiliate} handleOpenDeleteAffiliateModal={handleOpenDeleteAffiliateModal} />
           <Pagination returnPage={returnPage} currentPage={currentPage} nextPage={nextPage} totalOfPages={affiliates.totalOfPages} />

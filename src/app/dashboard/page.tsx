@@ -2,6 +2,7 @@
 
 import { getStats } from "@/actions/stats-actions";
 import PaymentChart from "@/components/payments-chart/PaymentChart";
+import Spinner from "@/components/ui/spinner";
 import { useState, useEffect, useCallback } from "react";
 
 interface MonthlyStats {
@@ -32,7 +33,7 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col w-[1080px] h-full my-2 m-auto">
       <div className="flex flex-col w-full h-full items-center justify-center m-auto">
-        {isLoading ? <p>Carregando...</p> :
+        {isLoading ? <Spinner /> :
           <PaymentChart stats={stats} />
         }
       </div>
