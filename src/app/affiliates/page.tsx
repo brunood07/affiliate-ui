@@ -60,7 +60,6 @@ export default function Affiliates() {
     setIsLoading(true);
     try {
       await deleteAffiliate(selectedId);
-      await fetchAffiliatesData(currentPage);
       toast({
         title: "Success",
         description: "Affiliate deleted successfully.",
@@ -73,6 +72,7 @@ export default function Affiliates() {
         variant: "destructive",
       });
     } finally {
+      await fetchAffiliatesData(currentPage);
       setIsLoading(false);
       setIsModalOpen(false);
     }
@@ -97,9 +97,13 @@ export default function Affiliates() {
   return (
     <div className="flex flex-col w-[1080px] h-full my-2 m-auto">
       <div className="flex flex-col w-full h-full items-center justify-center m-auto">
-        <AffiliatesList list={affiliates.list ?? []} isModalOpen={isModalOpen} handleCloseModal={handleCloseModal} handleDeleteAffiliate={handleDeleteAffiliate} handleOpenDeleteAffiliateModal={handleOpenDeleteAffiliateModal} />
-        <Pagination returnPage={returnPage} currentPage={currentPage} nextPage={nextPage} totalOfPages={affiliates.totalOfPages} />
-      </div>
+      {isLoading ? <p>Carregando...</p> :
+        <> 
+          <AffiliatesList list={affiliates.list ?? []} isModalOpen={isModalOpen} handleCloseModal={handleCloseModal} handleDeleteAffiliate={handleDeleteAffiliate} handleOpenDeleteAffiliateModal={handleOpenDeleteAffiliateModal} />
+          <Pagination returnPage={returnPage} currentPage={currentPage} nextPage={nextPage} totalOfPages={affiliates.totalOfPages} />
+        </>
+      }
+    </div>
     </div>
   );
 }

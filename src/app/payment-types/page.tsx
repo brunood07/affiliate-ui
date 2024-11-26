@@ -45,7 +45,6 @@ export default function PaymentTypes() {
     setIsLoading(true);
     try {
       await deletePaymentType(selectedId);
-      await fetchPaymentTypesData(currentPage);
       toast({
         title: "Success",
         description: "Payment Type deleted successfully.",
@@ -58,6 +57,7 @@ export default function PaymentTypes() {
         variant: "destructive",
       });
     } finally {
+      await fetchPaymentTypesData(currentPage);
       setIsLoading(false);
       setIsModalOpen(false);
     }
@@ -82,14 +82,18 @@ export default function PaymentTypes() {
   return (
     <div className="flex flex-col w-[1080px] h-full my-2 m-auto">
       <div className="flex flex-col w-full h-full items-center justify-center m-auto">
-        <PaymentTypesList 
-          list={paymentTypes.list ?? []} 
-          isModalOpen={isModalOpen} 
-          handleOpenDeletePaymentTypeModal={handleOpenDeletePaymentTypeModal} 
-          handleCloseModal={handleCloseModal}
-          handleDeletePaymentType={handleDeletePaymentType}
-        />
-        <Pagination returnPage={returnPage} currentPage={currentPage} nextPage={nextPage} totalOfPages={paymentTypes.totalOfPages} />
+        { isLoading ? <p>Carregando...</p> :
+          <>
+            <PaymentTypesList 
+              list={paymentTypes.list ?? []} 
+              isModalOpen={isModalOpen} 
+              handleOpenDeletePaymentTypeModal={handleOpenDeletePaymentTypeModal} 
+              handleCloseModal={handleCloseModal}
+              handleDeletePaymentType={handleDeletePaymentType}
+            />
+            <Pagination returnPage={returnPage} currentPage={currentPage} nextPage={nextPage} totalOfPages={paymentTypes.totalOfPages} />
+          </>
+        }
       </div>
     </div>
   );

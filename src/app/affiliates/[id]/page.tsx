@@ -46,8 +46,11 @@ export default function Page({
     setCurrentPage(currentPage + 1);
   }
 
-  return <div>
-    <PaymentsList list={payments?.list} affiliateName={payments?.affiliateName} affiliateId={id} />
-    <Pagination returnPage={returnPage} currentPage={currentPage} nextPage={nextPage} totalOfPages={payments.totalOfPages} />
-  </div>
+  return (
+  <div className="flex flex-col w-[1080px] h-full my-2 m-auto">
+    <div className="flex flex-col w-full h-full items-center justify-center m-auto">
+      <PaymentsList list={payments?.list} affiliateName={payments?.affiliateName} affiliateId={id} />
+      <Pagination returnPage={returnPage} currentPage={currentPage} nextPage={nextPage} totalOfPages={payments.totalOfPages} />
+    </div>
+  </div>)
 }

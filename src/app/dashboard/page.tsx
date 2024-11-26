@@ -12,6 +12,7 @@ interface MonthlyStats {
 
 export default function Dashboard() {
   const [stats, setStats] = useState<MonthlyStats[]>([] as MonthlyStats[]);
+  const [isLoading, seIsLoading] = useState(true);
 
   const fetchStats = useCallback(async () => {
     try {
@@ -19,6 +20,8 @@ export default function Dashboard() {
       setStats(response);
     } catch (error) {
       console.error('Error fetching stats:', error);
+    } finally {
+      seIsLoading(false)
     }
   }, [])
     
@@ -29,7 +32,9 @@ export default function Dashboard() {
   return (
     <div className="flex flex-col w-[1080px] h-full my-2 m-auto">
       <div className="flex flex-col w-full h-full items-center justify-center m-auto">
-        <PaymentChart stats={stats} />
+        {isLoading ? <p>Carregando...</p> :
+          <PaymentChart stats={stats} />
+        }
       </div>
     </div>
   );
