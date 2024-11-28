@@ -3,7 +3,7 @@ import { UpdatePaymentTypeFormType } from "@/components/update-payment-type-form
 import { baseURL } from "@/constants/endpoints"
 import { getSession } from "next-auth/react"
 
-export const fetchPaymentTypes = async (page: number, active?: boolean) => {
+const fetchPaymentTypesAction = async (page: number, active?: boolean) => {
   try {
     const session = await getSession()
 
@@ -23,7 +23,7 @@ export const fetchPaymentTypes = async (page: number, active?: boolean) => {
   }
 }
 
-export const addPaymentType = async (data: AddPaymentTypeFormType) => {
+const addPaymentType = async (data: AddPaymentTypeFormType) => {
   const session = await getSession()
 
   const response = await fetch(`${baseURL}/types`, {
@@ -43,7 +43,7 @@ export const addPaymentType = async (data: AddPaymentTypeFormType) => {
   return response.json()
 }
 
-export const createAffiliatePayment = async (affiliateId: string, paymentTypeId: string) => {
+const createAffiliatePayment = async (affiliateId: string, paymentTypeId: string) => {
   if (!affiliateId || !paymentTypeId) {
     throw new Error("Both affiliateId and paymentTypeId are required.");
   }
@@ -70,7 +70,7 @@ export const createAffiliatePayment = async (affiliateId: string, paymentTypeId:
   return response.json()
 }
 
-export const getPaymentTypeInfo = async (paymentTypeId: string) => {
+const getPaymentTypeInfo = async (paymentTypeId: string) => {
   const session = await getSession()
 
   const response = await fetch(`${baseURL}/types/${paymentTypeId}`, {
@@ -89,8 +89,7 @@ export const getPaymentTypeInfo = async (paymentTypeId: string) => {
   return response.json()
 }
 
-export const updatePaymentTypeInfo = async (paymentTypeId: string, data: UpdatePaymentTypeFormType) => {
-  console.log("🚀 ~ updatePaymentTypeInfo ~ data:", data)
+const updatePaymentTypeInfo = async (paymentTypeId: string, data: UpdatePaymentTypeFormType) => {
   const session = await getSession()
 
   const response = await fetch(`${baseURL}/types/${paymentTypeId}`, {
@@ -110,7 +109,7 @@ export const updatePaymentTypeInfo = async (paymentTypeId: string, data: UpdateP
   return response.json()
 }
 
-export const deletePaymentType = async (paymentTypeId: string) => {
+const deletePaymentType = async (paymentTypeId: string) => {
   const session = await getSession()
 
   const response = await fetch(`${baseURL}/types/${paymentTypeId}`, {
@@ -128,3 +127,5 @@ export const deletePaymentType = async (paymentTypeId: string) => {
 
   return response.json()
 }
+
+export { fetchPaymentTypesAction, addPaymentType, deletePaymentType, updatePaymentTypeInfo, getPaymentTypeInfo, createAffiliatePayment };

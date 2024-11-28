@@ -1,46 +1,20 @@
 "use client";
 
-import { fetchAffiliatePayment } from "@/actions/affiliates-actions";
 import Pagination from "@/components/pagination/Pagination";
-import PaymentsList, { Payment } from "@/components/payments-list/PaymentsList";
+import PaymentsList from "@/components/payments-list/PaymentsList";
 import Spinner from "@/components/ui/spinner";
-import { useState, useEffect, use } from "react";
-
-interface ListPaymentsRes {
-  page: number;
-  limit: number;
-  totalOfRecords: number;
-  totalOfPages: number;
-  affiliateName: string;
-  list: Payment[];
-}
+import { usePayments } from "@/hooks/use-payments";
+import { useState, use } from "react";
 
 export default function Page({
   params,
 }: {
   params: Promise<{ id: string }>
 }) {
-
   const { id } = use(params); 
-  const [payments, setPayments] = useState<ListPaymentsRes>({} as ListPaymentsRes);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [isLoading, setIsLoading] = useState(true)
-  
-  useEffect(() => {
-    (async () => {
-      if (!id) return;
-      try {
-        const response = await fetchAffiliatePayment(id, currentPage);
-        if (response) {
-          setPayments(response);
-        }
-      } catch (error) {
-        console.error("Failed to fetch payments:", error);
-      } finally {
-        setIsLoading(false)
-      }
-    })();
-  }, [id, currentPage]);
+  const { fetchAffiliatePayments } = usePayments();
+  const { data, isLoading } = fetchAffiliatePayments(id, currentPage);
 
   const returnPage = () => {
     setCurrentPage(currentPage - 1);
@@ -55,8 +29,8 @@ export default function Page({
     <div className="flex flex-col w-full h-full items-center justify-center m-auto">
       {isLoading ? <Spinner /> :
         <>
-          <PaymentsList list={payments?.list} affiliateName={payments?.affiliateName} affiliateId={id} />
-          <Pagination returnPage={returnPage} currentPage={currentPage} nextPage={nextPage} totalOfPages={payments.totalOfPages} />
+          <PaymentsList list={data?.list} affiliateName={data?.affiliateName} affiliateId={id} />
+          <Pagination returnPage={returnPage} currentPage={currentPage} nextPage={nextPage} totalOfPages={data.totalOfPages} />
         </>
       }
     </div>

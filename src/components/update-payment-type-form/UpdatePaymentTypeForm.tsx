@@ -19,16 +19,18 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { toast } from "@/hooks/use-toast"
 import { UpdatePaymentTypeFormType, updatePaymentTypeFormSchema } from "./update-payment-type-form-schema"
-import { getPaymentTypeInfo, updatePaymentTypeInfo } from "@/actions/payment-types-actions"
-import { useEffect, useState } from "react"
+import { updatePaymentTypeInfo } from "@/actions/payment-types-actions"
+import { useEffect } from "react"
 import Spinner from "../ui/spinner"
+import { usePaymentTypes } from "@/hooks/use-payment-types"
 
 interface UpdatePaymentTypeFormProps {
   paymentTypeId: string;
 }
 
 export default function UpdatePaymentTypeForm(props: UpdatePaymentTypeFormProps) {
-  const [isLoading, setIsLoading] = useState(true)
+  const { fetchPaymentTypeInfo } = usePaymentTypes();
+  const { data, isLoading } = fetchPaymentTypeInfo(props.paymentTypeId)
   
   const form = useForm<UpdatePaymentTypeFormType>({
     resolver: zodResolver(updatePaymentTypeFormSchema),
@@ -72,18 +74,15 @@ export default function UpdatePaymentTypeForm(props: UpdatePaymentTypeFormProps)
 
   useEffect(() => {
     (async () => {
-      const response = await getPaymentTypeInfo(props.paymentTypeId);
-      if (response) {
+      if (data) {
         form.reset({
-          name: response.name ?? '',
-          quantity: response.quantity ?? 0,
-          active: response.active ?? false
+          name: data.name ?? '',
+          quantity: data.quantity ?? 0,
+          active: data.active ?? false
         });
-
-        setIsLoading(false)
       }
     })()
-    }, [props.paymentTypeId, form])
+    }, [props.paymentTypeId, form, data])
 
   return (
     <div className="flex items-center justify-center p-4">

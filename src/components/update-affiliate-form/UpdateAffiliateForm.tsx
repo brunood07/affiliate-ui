@@ -13,18 +13,22 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { getAffiliateInfo, updateAffiliateInfo } from "@/actions/affiliates-actions"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 import { toast } from "@/hooks/use-toast"
 import { UpdateAffiliateFormType, updateAffiliateFormSchema } from "./update-affiliate-form-schema"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import Spinner from "../ui/spinner"
+import { updateAffiliateInfo } from "@/actions/affiliates-actions"
+import { useAffiliates } from "@/hooks/use-affiliates"
 
 interface UpdateAffiliateFormProps {
   affiliateId: string;
 }
+
 export default function UpdateAffiliateForm(props: UpdateAffiliateFormProps) {
-  const [isLoading, setIsLoading] = useState(true)
+  const{ fetchAffiliateInfo } = useAffiliates();
+  const { data, isLoading } = fetchAffiliateInfo(props.affiliateId);
+
   const form = useForm<UpdateAffiliateFormType>({
     resolver: zodResolver(updateAffiliateFormSchema),
     defaultValues: {
@@ -34,7 +38,7 @@ export default function UpdateAffiliateForm(props: UpdateAffiliateFormProps) {
       phoneNumber: '',
     },
   })
-
+ 
   async function onSubmit(values: UpdateAffiliateFormType) {
     try {
       const response = await updateAffiliateInfo(props.affiliateId, values);
@@ -68,19 +72,16 @@ export default function UpdateAffiliateForm(props: UpdateAffiliateFormProps) {
 
   useEffect(() => {
     (async () => {
-      const response = await getAffiliateInfo(props.affiliateId);
-      if (response) {
+      if (data) {
         form.reset({
-          firstName: response.firstName,
-          lastName: response.lastName,
-          email: response.email,
-          phoneNumber: response.phoneNumber,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          phoneNumber: data.phoneNumber,
         })
-
-        setIsLoading(false)
       }
     })()
-    }, [props.affiliateId, form])
+    }, [props.affiliateId, form, data])
 
   return (
     <div className="flex items-center justify-center p-4">

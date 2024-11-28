@@ -3,7 +3,7 @@ import { UpdateAffiliateFormType } from '@/components/update-affiliate-form/upda
 import { baseURL } from '@/constants/endpoints'
 import { getSession } from 'next-auth/react'
 
-export const fetchAffiliates = async (page: number) => {
+export const fetchAffiliatesAction = async (page: number) => {
   const session = await getSession()
   const response = await fetch(`${baseURL}/affiliates/list?page=` + page, {
     headers: {
@@ -18,7 +18,7 @@ export const fetchAffiliates = async (page: number) => {
   return response.json()
 }
 
-export const addAffiliate = async (data: addAffiliateFormType) => {
+const addAffiliate = async (data: addAffiliateFormType) => {
   const session = await getSession()
 
   const response = await fetch(`${baseURL}/affiliates`, {
@@ -38,7 +38,7 @@ export const addAffiliate = async (data: addAffiliateFormType) => {
   return response.json()
 }
 
-export const getAffiliateInfo = async (affiliateId: string) => {
+const getAffiliateInfo = async (affiliateId: string) => {
   const session = await getSession()
 
   const response = await fetch(`${baseURL}/affiliates/info/${affiliateId}`, {
@@ -57,7 +57,7 @@ export const getAffiliateInfo = async (affiliateId: string) => {
   return response.json()
 }
 
-export const updateAffiliateInfo = async (affiliateId: string, data: UpdateAffiliateFormType) => {
+const updateAffiliateInfo = async (affiliateId: string, data: UpdateAffiliateFormType) => {
   const session = await getSession()
 
   const response = await fetch(`${baseURL}/affiliates/${affiliateId}`, {
@@ -77,39 +77,16 @@ export const updateAffiliateInfo = async (affiliateId: string, data: UpdateAffil
   return response.json()
 }
 
-export const deleteAffiliate = async (affiliateId: string) => {
+const deleteAffiliate = async (affiliateId: string) => {
   const session = await getSession()
 
-  const response = await fetch(`${baseURL}/affiliates/${affiliateId}`, {
+  await fetch(`${baseURL}/affiliates/${affiliateId}`, {
     method: 'DELETE',
     headers: {
       'Authorization': `Bearer ${session?.accessToken}`,
       'Content-Type': 'application/json'
     },
   })
-
-  if (!response.ok) {
-    const errorData = await response.json()
-    throw new Error(errorData.message || 'Failed to update Affiliate')
-  }
-
-  return response.json()
 }
 
-export const fetchAffiliatePayment = async (id: string, page: number) => {
-  const session = await getSession()
-
-  const response = await fetch(`${baseURL}/affiliate/payments/${id}?page=` + page, {
-    headers: {
-      'Authorization': `Bearer ${session?.accessToken}`,
-      'Content-Type': 'application/json'
-    },
-  })
-
-  if (!response.ok) {
-    const errorData = await response.json()
-    throw new Error(errorData.message || 'Failed to fetch affiliate payments')
-  }
-
-  return response.json()
-}
+export { addAffiliate, deleteAffiliate, updateAffiliateInfo, getAffiliateInfo };
